@@ -1,0 +1,44 @@
+[
+  {
+    "number": "+91 00000 00001",
+    "brand": "Zomato",
+    "note": "Caller claimed to be Zomato delivery support and demanded UPI pin for refund.",
+    "source": "sample",
+    "sample": true
+  },
+  {
+    "number": "+91 00000 00001",
+    "brand": "Zomato",
+    "note": "Phishing call asking for OTP for cancelled order.",
+    "source": "sample",
+    "sample": true
+  },
+  {
+    "number": "+91 00000 00001",
+    "brand": "Zomato",
+    "note": "Reported fake customer helpline asking for remote screen access via AnyDesk.",
+    "source": "sample",
+    "sample": true
+  },
+  {
+    "number": "+91 00000 00002",
+    "brand": "State Bank of India",
+    "note": "SMS claiming SBI YONO account blocked. Asked to click malicious link.",
+    "source": "sample",
+    "sample": true
+  },
+  {
+    "number": "+91 00000 00002",
+    "brand": "State Bank of India",
+    "note": "Impersonating SBI fraud prevention officer asking for net banking OTP.",
+    "source": "sample",
+    "sample": true
+  },
+  {
+    "number": "+91 00000 00003",
+    "brand": "Paytm",
+    "note": "Fake KYC renewal call claiming Paytm wallet is suspended.",
+    "source": "sample",
+    "sample": true
+  }
+]
