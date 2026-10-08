@@ -1,0 +1,10 @@
+# CODEOWNERS
+# One owner per folder. Replace placeholder handles with real GitHub usernames.
+
+/bot/        @member1-github
+/backend/    @member2-github
+/frontend/   @member3-github
+/detection/  @member4-github
+/data/       @member5-github
+/tests/      @member5-github
+/docs/       @member1-github @member2-github @member3-github @member4-github @member5-github
