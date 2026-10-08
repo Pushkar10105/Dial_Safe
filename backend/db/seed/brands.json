@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Zomato",
+    "aliases": ["zomato", "zomato care", "zomato support", "zomato ltd"],
+    "official_numbers": [],
+    "source_url": "https://www.zomato.com/contact",
+    "last_checked": "2026-10-08"
+  },
+  {
+    "name": "Swiggy",
+    "aliases": ["swiggy", "swiggy care", "swiggy support", "swiggy instamart"],
+    "official_numbers": [],
+    "source_url": "https://www.swiggy.com/contact",
+    "last_checked": "2026-10-08"
+  },
+  {
+    "name": "Paytm",
+    "aliases": ["paytm", "paytm care", "paytm payments bank", "paytm customer care"],
+    "official_numbers": [],
+    "source_url": "https://paytm.com/care",
+    "last_checked": "2026-10-08"
+  },
+  {
+    "name": "Flipkart",
+    "aliases": ["flipkart", "flipkart care", "flipkart support", "flipkart customer service"],
+    "official_numbers": [],
+    "source_url": "https://www.flipkart.com/helpcentre",
+    "last_checked": "2026-10-08"
+  },
+  {
+    "name": "State Bank of India",
+    "aliases": ["sbi", "state bank of india", "sbi care", "sbi support"],
+    "official_numbers": [],
+    "source_url": "https://sbi.co.in/web/customer-care",
+    "last_checked": "2026-10-08"
+  }
+]

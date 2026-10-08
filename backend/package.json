@@ -1,0 +1,30 @@
+{
+  "name": "dialsafe-backend",
+  "version": "1.0.0",
+  "description": "DialSafe REST API server and database layer",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node db/seed.js",
+    "reset": "node db/reset.js",
+    "test": "node tests/test.js && node tests/integration.test.js",
+    "test:e2e": "node tests/e2e.test.js"
+  },
+  "keywords": [
+    "dialsafe",
+    "scam-detection",
+    "express",
+    "postgres"
+  ],
+  "author": "DialSafe Team",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.13.1"
+  }
+}

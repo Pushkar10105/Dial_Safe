@@ -7,17 +7,14 @@ Stack and tooling choices for each area. Update this table when a decision is ma
 | Area | Stack / choice | Decided by | Date |
 |---|---|---|---|
 | Bot | TBD | — | — |
-| Backend | TBD | — | — |
-| Database | TBD | — | — |
+| Backend | Node.js (18+) + Express | Member 2 | 2026-10-08 |
+| Database | PostgreSQL (pg connection pool, Neon/Supabase) | Member 2 | 2026-10-08 |
 | Frontend | TBD | — | — |
 | Detection | TBD | — | — |
-| Hosting | TBD | — | — |
+| Hosting | Render (Express Web Service) | Member 2 | 2026-10-08 |
 
 ## Decision log
 
-Add a new entry here whenever a meaningful technical decision is made. Include what was decided, why, and any alternatives that were considered.
+### 2026-10-08 — Chose Node.js + Express and PostgreSQL for backend
+Decided by Member 2. We picked Node.js + Express because it is lightweight, quick to scaffold, and integrates well with Twilio webhook handling and modern hosting. We picked PostgreSQL with the raw `pg` connection pool (no ORM) for reliability and simplicity on free tiers like Neon or Supabase. Render was selected as the deployment target to provide a public HTTPS URL.
 
-<!-- Example entry:
-### 2026-10-08 — Chose X for backend
-Decided by Member 2. We picked X because Y. We considered Z but ruled it out because W.
--->
