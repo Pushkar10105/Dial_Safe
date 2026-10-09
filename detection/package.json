@@ -1,0 +1,17 @@
+{
+  "name": "dialsafe-detection",
+  "version": "1.0.0",
+  "description": "DialSafe scam detection engine: phone normalisation, brand matching, and risk evaluation",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node tests/detection.test.js"
+  },
+  "keywords": [
+    "dialsafe",
+    "scam-detection",
+    "phone-verification",
+    "heuristics"
+  ],
+  "author": "Member 4 (Detection Engine)",
+  "license": "ISC"
+}
