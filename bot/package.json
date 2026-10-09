@@ -1,0 +1,21 @@
+{
+  "name": "dialsafe-bot",
+  "version": "1.0.0",
+  "description": "DialSafe WhatsApp bot: Twilio webhook, intent routing, and reply formatting",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "simulate": "node cli-simulator.js",
+    "test": "node tests/bot.test.js"
+  },
+  "keywords": ["dialsafe", "whatsapp", "twilio", "bot", "scam-detection"],
+  "author": "DialSafe Team - Member 1",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "twilio": "^5.4.0"
+  }
+}
