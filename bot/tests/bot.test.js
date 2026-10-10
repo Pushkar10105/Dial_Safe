@@ -8,6 +8,10 @@
  * No Twilio or backend required. Uses Node's built-in assert module.
  */
 
+// Provide fallback test environment variables if not already set
+process.env.BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
+process.env.BOT_API_KEY = process.env.BOT_API_KEY || 'test-key';
+
 const assert = require('assert');
 
 // ── Module stubs ──────────────────────────────────────────────────────────

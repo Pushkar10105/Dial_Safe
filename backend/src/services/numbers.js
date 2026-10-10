@@ -27,7 +27,7 @@ function normalizeNumber(raw) {
     tollFreeCandidate = tollFreeCandidate.slice(1);
   }
 
-  if (/^(1800|1860)\d{6,7}$/.test(tollFreeCandidate)) {
+  if (/^(1800|1860)\d{4,7}$/.test(tollFreeCandidate)) {
     return {
       valid: true,
       normalized: tollFreeCandidate,
@@ -77,6 +77,17 @@ function normalizeNumber(raw) {
     }
   }
 
+  // 4. Special National Helplines & Telecom Shortcodes (e.g. 1930, 1915, 139, 198, 199, 121)
+  const cleanShortcode = clean.replace(/^\+91/, '');
+  const SPECIAL_SHORTCODES = new Set(['1930', '1915', '139', '198', '199', '121', '100', '112', '1091', '1098']);
+  if (SPECIAL_SHORTCODES.has(cleanShortcode)) {
+    return {
+      valid: true,
+      normalized: cleanShortcode,
+      type: 'shortcode'
+    };
+  }
+
   return { valid: false, normalized: null, type: null };
 }
 
@@ -92,7 +103,7 @@ function extractNumber(text) {
   const patterns = [
     /(?:\+91[\-\s]?)?[6-9]\d{4}[\-\s]?\d{5}\b/,
     /(?:\+91[\-\s]?)?[6-9]\d{9}\b/,
-    /\b(?:1800|1860)[\-\s]?\d{3}[\-\s]?\d{3,4}\b/,
+    /\b(?:1800|1860)[\-\s]?(?:\d{3}[\-\s]?\d{3,4}|\d{4})\b/,
     /\b0\d{2,4}[\-\s]?\d{6,8}\b/
   ];
 
