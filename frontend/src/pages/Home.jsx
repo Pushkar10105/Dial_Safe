@@ -4,9 +4,11 @@ import { ArrowRight, Search, Phone } from 'lucide-react'
 import {
   Shell,
   NumberForm,
+  BrandCard,
   WhatsAppBand,
   LogoIcon,
 } from '../components/dialsafe.jsx'
+import { brands } from '../lib/mock-data.js'
 
 export default function Home({ onOpenVoice }) {
   return (
@@ -80,6 +82,23 @@ export default function Home({ onOpenVoice }) {
 
       {/* WhatsApp Bot Connection */}
       <WhatsAppBand />
+
+      {/* Sample Examples */}
+      <section className="sample-section">
+        <div>
+          <p className="eyebrow">Verified directory</p>
+          <h2>Browse sample verified company contacts.</h2>
+          <p style={{ marginTop: 12, color: 'var(--muted)', fontSize: 17 }}>
+            All numbers are verified against official applications and corporate portals.
+          </p>
+        </div>
+
+        <div className="brand-list">
+          {brands.map((brand) => (
+            <BrandCard key={brand.brand} brand={brand} />
+          ))}
+        </div>
+      </section>
     </Shell>
   )
 }

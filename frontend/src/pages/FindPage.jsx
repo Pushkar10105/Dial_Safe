@@ -25,9 +25,6 @@ export default function FindPage({ onOpenVoice }) {
 
   useEffect(() => {
     let isMounted = true
-    setLoading(true)
-    setShowSkeleton(false)
-    setSecondsElapsed(0)
     const startTime = Date.now()
 
     const interval = setInterval(() => {
@@ -35,13 +32,13 @@ export default function FindPage({ onOpenVoice }) {
     }, 1000)
 
     const skeletonTimer = setTimeout(() => {
-      if (isMounted) setShowSkeleton(true)
+      if (loading) setShowSkeleton(true)
     }, 200)
 
     getAllBrands()
       .then((data) => {
         const elapsed = Date.now() - startTime
-        const delayRemaining = elapsed < 200 ? 0 : 0
+        const delayRemaining = showSkeleton && elapsed < 400 ? 400 - elapsed : 0
 
         setTimeout(() => {
           if (isMounted) {
@@ -59,7 +56,7 @@ export default function FindPage({ onOpenVoice }) {
       clearInterval(interval)
       clearTimeout(skeletonTimer)
     }
-  }, [])
+  }, [showSkeleton, loading])
 
   const handleQueryChange = (val) => {
     setQuery(val)

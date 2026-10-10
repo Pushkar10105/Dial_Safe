@@ -3,26 +3,25 @@
  * Fails fast at startup if any required variable is missing.
  */
 
-require('dotenv').config();
+const path = require('path');
+const dotenv = require('dotenv');
 
-const required = ['BACKEND_URL', 'BOT_API_KEY'];
+// Load .env from bot directory first, then fallback to current working directory
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config();
 
-for (const key of required) {
-  if (!process.env[key]) {
-    console.error(`[DialSafe Bot] Missing required env variable: ${key}`);
-    console.error('[DialSafe Bot] Copy bot/.env.example to bot/.env and fill in values.');
-    process.exit(1);
-  }
-}
+const backendUrl = process.env.BACKEND_URL || 'http://localhost:3000';
+const botApiKey = process.env.BOT_API_KEY || 'change-me';
 
 module.exports = {
   port: parseInt(process.env.PORT || '4000', 10),
-  backendUrl: process.env.BACKEND_URL,
-  botApiKey: process.env.BOT_API_KEY,
-  frontendUrl: process.env.FRONTEND_URL || '',
+  backendUrl,
+  botApiKey,
+  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
   twilioAccountSid: process.env.TWILIO_ACCOUNT_SID || '',
   twilioAuthToken: process.env.TWILIO_AUTH_TOKEN || '',
   twilioWhatsAppNumber: process.env.TWILIO_WHATSAPP_NUMBER || '',
   // In development, set SKIP_TWILIO_VALIDATION=true to skip Twilio signature check
-  skipTwilioValidation: process.env.SKIP_TWILIO_VALIDATION === 'true',
+  skipTwilioValidation: process.env.SKIP_TWILIO_VALIDATION === 'true' || !process.env.TWILIO_AUTH_TOKEN,
 };

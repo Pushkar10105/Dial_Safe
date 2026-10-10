@@ -318,24 +318,10 @@ export function Footer() {
    ========================================================================== */
 export function Shell({ children, onOpenVoice }) {
   const location = useLocation()
-  const { pathname, hash } = location
+  const pathname = location.pathname
 
-  // On route change: scroll to top or target hash, and manage focus
+  // On route change: scroll to top and move focus to page H1 (Section 7)
   useEffect(() => {
-    if (hash) {
-      const timer = setTimeout(() => {
-        const el = document.querySelector(hash)
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' })
-          const input = el.querySelector('input')
-          if (input) {
-            input.focus({ preventScroll: true })
-          }
-        }
-      }, 50)
-      return () => clearTimeout(timer)
-    }
-
     window.scrollTo({ top: 0, behavior: 'instant' })
     const timer = setTimeout(() => {
       const h1 = document.querySelector('h1')
@@ -345,7 +331,7 @@ export function Shell({ children, onOpenVoice }) {
       }
     }, 100)
     return () => clearTimeout(timer)
-  }, [pathname, hash])
+  }, [pathname])
 
   return (
     <>
@@ -645,22 +631,9 @@ export function BrandCard({ brand }) {
 export function CopyNumber({ number }) {
   const [copied, setCopied] = useState(false)
 
-  const handleCopy = async () => {
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(number)
-      } else {
-        const textarea = document.createElement('textarea')
-        textarea.value = number
-        textarea.style.position = 'fixed'
-        textarea.style.opacity = '0'
-        document.body.appendChild(textarea)
-        textarea.select()
-        document.execCommand('copy')
-        document.body.removeChild(textarea)
-      }
-    } catch {
-      // Ignored: still display visual feedback
+  const handleCopy = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(number)
     }
     setCopied(true)
     setTimeout(() => setCopied(false), 3000)
@@ -704,18 +677,11 @@ export function ConfirmReportModal({
   useEffect(() => {
     if (!isOpen) return
 
-    const timer = setTimeout(() => {
-      if (modalRef.current) {
-        const firstFocusable = modalRef.current.querySelector('button:not(:disabled)')
-        if (firstFocusable) firstFocusable.focus()
-      }
-    }, 50)
-
     function handleKeyDown(e) {
       if (e.key === 'Escape') onCancel()
       if (e.key === 'Tab' && modalRef.current) {
         const focusable = modalRef.current.querySelectorAll(
-          'button:not(:disabled), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         )
         if (focusable.length === 0) return
         const first = focusable[0]
@@ -732,10 +698,7 @@ export function ConfirmReportModal({
     }
 
     window.addEventListener('keydown', handleKeyDown)
-    return () => {
-      clearTimeout(timer)
-      window.removeEventListener('keydown', handleKeyDown)
-    }
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onCancel])
 
   if (!isOpen) return null
@@ -840,20 +803,11 @@ export function WhatsAppBand() {
   }
 
   useEffect(() => {
-    if (!showQR) return
-
-    const timer = setTimeout(() => {
-      setQrLoading(false)
-    }, 450)
-
-    function handleKeyDown(e) {
-      if (e.key === 'Escape') setShowQR(false)
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => {
-      clearTimeout(timer)
-      window.removeEventListener('keydown', handleKeyDown)
+    if (showQR) {
+      const timer = setTimeout(() => {
+        setQrLoading(false)
+      }, 450)
+      return () => clearTimeout(timer)
     }
   }, [showQR])
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import {
   Shell,
   VerdictCard,
@@ -20,9 +20,6 @@ export default function NumberDetailPage({ onOpenVoice }) {
 
   useEffect(() => {
     let isMounted = true
-    setLoading(true)
-    setShowSkeleton(false)
-    setSecondsElapsed(0)
     const startTime = Date.now()
 
     const interval = setInterval(() => {
@@ -30,13 +27,13 @@ export default function NumberDetailPage({ onOpenVoice }) {
     }, 1000)
 
     const skeletonTimer = setTimeout(() => {
-      if (isMounted) setShowSkeleton(true)
+      if (loading) setShowSkeleton(true)
     }, 200)
 
     getNumberDetails(rawNumber)
       .then((data) => {
         const elapsed = Date.now() - startTime
-        const delayRemaining = elapsed < 200 ? 0 : 0
+        const delayRemaining = showSkeleton && elapsed < 400 ? 400 - elapsed : 0
 
         setTimeout(() => {
           if (isMounted) {
@@ -46,10 +43,7 @@ export default function NumberDetailPage({ onOpenVoice }) {
         }, delayRemaining)
       })
       .catch(() => {
-        if (isMounted) {
-          setResult(null)
-          setLoading(false)
-        }
+        if (isMounted) setLoading(false)
       })
 
     return () => {
@@ -57,7 +51,7 @@ export default function NumberDetailPage({ onOpenVoice }) {
       clearInterval(interval)
       clearTimeout(skeletonTimer)
     }
-  }, [rawNumber])
+  }, [rawNumber, showSkeleton, loading])
 
   return (
     <Shell onOpenVoice={onOpenVoice}>
@@ -83,32 +77,6 @@ export default function NumberDetailPage({ onOpenVoice }) {
 
         {!loading && result && (
           <VerdictCard result={result} />
-        )}
-
-        {!loading && !result && (
-          <div
-            style={{
-              background: 'var(--paper)',
-              borderRadius: 'var(--radius-card)',
-              padding: 40,
-              border: '1px solid var(--line)',
-              textAlign: 'center',
-              marginTop: 24,
-            }}
-          >
-            <h2>Unable to load details</h2>
-            <p style={{ color: 'var(--muted)', fontSize: 16, margin: '12px auto 24px', maxWidth: 480 }}>
-              We could not retrieve assessment details for this number. Check the number and try again.
-            </p>
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link to="/#check" className="button button-outline">
-                Check another number
-              </Link>
-              <Link to={`/report?number=${encodeURIComponent(rawNumber)}`} className="button button-dark">
-                Report this number
-              </Link>
-            </div>
-          </div>
         )}
       </div>
     </Shell>

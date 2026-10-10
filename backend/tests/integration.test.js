@@ -71,7 +71,7 @@ server.listen(0, async () => {
       });
       assert.strictEqual(res.status, 200);
       assert(res.headers['content-type'].includes('text/xml'));
-      assert(res.body.includes('<Response></Response>'));
+      assert(res.body.includes('<Response><Message>') && res.body.includes('</Message></Response>'));
     });
 
     await it('POST /check rejects empty body with 400', async () => {

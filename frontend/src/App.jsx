@@ -37,6 +37,21 @@ export default function App() {
         onClose={() => setIsVoiceModalOpen(false)}
         onCheckNumber={handleVoiceCheckNumber}
       />
+
+      {!isVoiceModalOpen && (
+        <button
+          type="button"
+          className="floating-chatbot-btn"
+          id="floating-chatbot-btn"
+          onClick={openVoice}
+          title="Open DialSafe AI Chatbot & Voice Assistant"
+          aria-label="Open DialSafe AI Chatbot & Voice Assistant"
+        >
+          <span style={{ fontSize: '18px' }}>🤖</span>
+          <span>Ask AI Bot</span>
+          <span className="floating-chatbot-badge">Voice + Chat</span>
+        </button>
+      )}
     </>
   )
 }

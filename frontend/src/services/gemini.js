@@ -162,12 +162,13 @@ Respond in a warm, respectful, concise tone for an elderly person.
   return generateLocalFallbackResponse({ text, lang, foundNumber, matchedBrand });
 }
 
-function generateLocalFallbackResponse({ lang, foundNumber, matchedBrand }) {
+function generateLocalFallbackResponse({ text = '', lang = 'en', foundNumber, matchedBrand }) {
   const brandName = matchedBrand ? (matchedBrand.name || matchedBrand.brand) : '';
   const officialNumbers = matchedBrand ? (matchedBrand.official_numbers || matchedBrand.officialNumbers || []) : [];
   const isAppSupport = matchedBrand ? (matchedBrand.supportChannel === 'app' || officialNumbers.length === 0) : false;
   const primaryNumber = officialNumbers.length > 0 ? officialNumbers[0] : null;
   const spokenNumber = primaryNumber ? formatForVoice(primaryNumber) : '';
+  const cleanQuery = (text || '').toLowerCase().trim();
 
   // Scenario A: Number check query
   if (foundNumber) {
@@ -209,7 +210,7 @@ function generateLocalFallbackResponse({ lang, foundNumber, matchedBrand }) {
     }
     if (lang === 'ta') {
       return {
-        replyText: `எச்சரிக்கை! இந்த எண் அதிகாரப்பூர்வ எண் அல்ல. யாரிடமும் ஓடிபி (OTP) அல்லது வங்கி விவரங்களைப் பகிர வேண்டாம். உதவி எண் 1930-ஐ அழைக்கவும்.`,
+        replyText: `எச்சரிக்கை! இந்த எண் அதிகாரப்பூர்வ எண் அல்ல. யாரிடமும் ஓடிபி (OTP) அல்லது வங்கி விவரங்களைப் பகिर வேண்டாம். உதவி எண் 1930-ஐ அழைக்கவும்.`,
         foundNumber,
         matchedBrand: brandName || null
       };
@@ -268,7 +269,101 @@ function generateLocalFallbackResponse({ lang, foundNumber, matchedBrand }) {
     };
   }
 
-  // Scenario C: General query fallback
+  // Scenario C: Conversational Intents (Greetings, Cybercrime Helpline, How to Report)
+  const isGreeting = /^(hi|hello|hey|helo|hii|namaste|नमस्ते|नमस्कार|வணக்கம்|காலை வணக்கம்)/i.test(cleanQuery);
+  const isHelpline = /(1930|cybercrime|cyber crime|हेल्पलाइन|साइबर|உதவி எண்)/i.test(cleanQuery);
+  const isReportHow = /(report|शिकायत|புகார்|how to report|शिकायत कैसे)/i.test(cleanQuery);
+  const isOtpFraud = /(otp|pin|password|ओटीपी|पिन|மோசடி|passcode)/i.test(cleanQuery);
+
+  if (isGreeting) {
+    if (lang === 'hi') {
+      return {
+        replyText: `नमस्ते! मैं डायलसेफ सुरक्षा सहायक हूँ। आप किसी भी बैंक या कंपनी (जैसे SBI, Zomato, Paytm, HDFC) का हेल्पलाइन नंबर पूछ सकते हैं या कोई संदिग्ध नंबर चेक करवा सकते हैं।`,
+        foundNumber: null,
+        matchedBrand: null
+      };
+    }
+    if (lang === 'ta') {
+      return {
+        replyText: `வணக்கம்! நான் டயல்சேஃப் பாதுகாப்பு உதவியாளர். நிறுவனத்தின் உதவி எண் அறிய அல்லது சந்தேகத்திற்கிடமான தொலைபேசி எண்ணைச் சரிபார்க்கக் கேட்கலாம்.`,
+        foundNumber: null,
+        matchedBrand: null
+      };
+    }
+    return {
+      replyText: `Hello! I am DialSafe Safety Assistant. You can ask for official care numbers (like SBI, Zomato, Paytm, HDFC) or provide a phone number to check for scam alerts.`,
+      foundNumber: null,
+      matchedBrand: null
+    };
+  }
+
+  if (isHelpline) {
+    if (lang === 'hi') {
+      return {
+        replyText: `भारत की राष्ट्रीय साइबर अपराध हेल्पलाइन 1930 है। आप cybercrime.gov.in पर भी तुरंत शिकायत दर्ज कर सकते हैं। किसी भी व्यक्ति के साथ ओटीपी या पिन साझा न करें।`,
+        foundNumber: '1930',
+        matchedBrand: null
+      };
+    }
+    if (lang === 'ta') {
+      return {
+        replyText: `இந்தியாவின் தேசிய சைபர் குற்ற உதவி எண் 1930 ஆகும். இணையதள புகார்: cybercrime.gov.in. எந்தவொரு காரணத்திற்காகவும் ஓடிபி பகிர வேண்டாம்.`,
+        foundNumber: '1930',
+        matchedBrand: null
+      };
+    }
+    return {
+      replyText: `India's National Cybercrime Helpline is 1930. You can also report fraud online at cybercrime.gov.in. Never share banking passwords or OTPs.`,
+      foundNumber: '1930',
+      matchedBrand: null
+    };
+  }
+
+  if (isReportHow) {
+    if (lang === 'hi') {
+      return {
+        replyText: `संदिग्ध नंबर रिपोर्ट करने के लिए ऊपर 'Report a number' पर क्लिक करें या व्हाट्सएप पर "report <नंबर>" लिखकर भेजें।`,
+        foundNumber: null,
+        matchedBrand: null
+      };
+    }
+    if (lang === 'ta') {
+      return {
+        replyText: `சந்தேகத்திற்கிடமான எண்ணைப் புகாரளிக்க இணையதளத்தில் 'Report a number' பயன்படுத்தவும் அல்லது வாட்ஸ்அப்பில் 'report <number>' என அனுப்பவும்.`,
+        foundNumber: null,
+        matchedBrand: null
+      };
+    }
+    return {
+      replyText: `To report a suspicious number, click 'Report a number' at the top or message "report <number>" to our WhatsApp bot.`,
+      foundNumber: null,
+      matchedBrand: null
+    };
+  }
+
+  if (isOtpFraud) {
+    if (lang === 'hi') {
+      return {
+        replyText: `सतर्क रहें! कोई भी बैंक या कंपनी कभी भी फोन पर ओटीपी (OTP), सीवीवी या यूपीआई पिन नहीं मांगती। यदि आपने जानकारी साझा कर दी है, तो तुरंत 1930 पर कॉल करें।`,
+        foundNumber: '1930',
+        matchedBrand: null
+      };
+    }
+    if (lang === 'ta') {
+      return {
+        replyText: `எச்சரிக்கை! வங்கிகளோ நிறுவனங்களோ ஒருபோதும் தொலைபேசியில் ஓடிபி (OTP) அல்லது பின் கேட்க மாட்டார்கள். ஏமாற்றப்பட்டால் உடனடியாக 1930-ஐ அழைக்கவும்.`,
+        foundNumber: '1930',
+        matchedBrand: null
+      };
+    }
+    return {
+      replyText: `Crucial Alert: Legitimate companies and banks NEVER ask for OTPs or PINs over the phone. If you suspect a breach, immediately dial national helpline 1930.`,
+      foundNumber: '1930',
+      matchedBrand: null
+    };
+  }
+
+  // General query fallback
   if (lang === 'hi') {
     return {
       replyText: `मैं डायलसेफ हूँ। आप किसी भी कंपनी का नाम (जैसे SBI, Zomato, Paytm या HDFC) बोलकर उनका असली कस्टमर केयर नंबर पूछ सकते हैं, या कोई संदिग्ध फ़ोन नंबर चेक करवा सकते हैं।`,
@@ -284,7 +379,7 @@ function generateLocalFallbackResponse({ lang, foundNumber, matchedBrand }) {
     };
   }
   return {
-    replyText: `I am DialSafe. You can speak any company name (like SBI, Zomato, Paytm, or HDFC) to get their official helpline, or read out a phone number to check if it looks like a scam.`,
+    replyText: `I am DialSafe. You can speak or type any company name (like SBI, Zomato, Paytm, or HDFC) to get their official helpline, or check if a phone number is reported as a scam.`,
     foundNumber: null,
     matchedBrand: null
   };
