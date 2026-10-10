@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
@@ -702,7 +703,7 @@ export function ConfirmReportModal({
 
   if (!isOpen) return null
 
-  return (
+  const modalEl = (
     <div className="modal-backdrop" onClick={onCancel} role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div className="modal-card" ref={modalRef} onClick={(e) => e.stopPropagation()}>
         <h3 id="modal-title" style={{ marginTop: 0, fontSize: 24 }}>
@@ -741,6 +742,8 @@ export function ConfirmReportModal({
       </div>
     </div>
   )
+
+  return typeof document !== 'undefined' ? createPortal(modalEl, document.body) : modalEl
 }
 
 /* ==========================================================================
@@ -791,7 +794,85 @@ export function ReportSuccessCard({ reportCount, onDismiss }) {
    ========================================================================== */
 export function WhatsAppBand() {
   const [showQR, setShowQR] = useState(false)
+  const [qrLoading, setQrLoading] = useState(true)
   const whatsappLink = import.meta.env.VITE_WHATSAPP_LINK || 'https://wa.me/910000000000'
+
+  const handleOpenQR = () => {
+    setQrLoading(true)
+    setShowQR(true)
+  }
+
+  useEffect(() => {
+    if (showQR) {
+      const timer = setTimeout(() => {
+        setQrLoading(false)
+      }, 450)
+      return () => clearTimeout(timer)
+    }
+  }, [showQR])
+
+  const qrModal = showQR ? (
+    <div className="modal-backdrop" onClick={() => setShowQR(false)} role="dialog" aria-modal="true">
+      <div className="modal-card" style={{ textAlign: 'center', maxWidth: 480 }} onClick={(e) => e.stopPropagation()}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#E6F4EA', display: 'grid', placeItems: 'center', color: '#1E7B3A' }}>
+              <QrCode size={18} />
+            </div>
+            <h3 style={{ margin: 0, fontSize: 20 }}>Scan to chat on WhatsApp</h3>
+          </div>
+          <button
+            type="button"
+            className="modal-close-btn"
+            onClick={() => setShowQR(false)}
+            aria-label="Close"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <p style={{ color: 'var(--muted)', fontSize: 15, margin: '0 0 16px' }}>
+          Point your smartphone camera to connect directly with the DialSafe WhatsApp verification bot.
+        </p>
+
+        {/* QR Code Container with Loading Skeleton & Scanning Beam */}
+        <div className="qr-container-box">
+          {qrLoading ? (
+            <div className="qr-skeleton skeleton" aria-label="Loading QR code">
+              <div className="qr-scan-line" aria-hidden="true" />
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 2 }}>
+                <span className="spinner" style={{ borderColor: 'rgba(20,20,19,0.2)', borderTopColor: 'var(--ink)' }} />
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)' }}>Generating QR...</span>
+              </div>
+            </div>
+          ) : (
+            <div className="qr-code-rendered">
+              <QRCodeSVG value={whatsappLink} size={200} />
+            </div>
+          )}
+        </div>
+
+        <p style={{ fontSize: 13, color: 'var(--muted)', margin: '8px 0 20px' }}>
+          {qrLoading ? 'Connecting to Twilio WhatsApp Sandbox…' : 'Twilio WhatsApp Sandbox join instruction supported.'}
+        </p>
+
+        <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
+          <button type="button" className="button button-outline" onClick={() => setShowQR(false)}>
+            Close
+          </button>
+          <a
+            className="button button-dark"
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: 'none' }}
+          >
+            Chat on WhatsApp <ArrowRight size={16} />
+          </a>
+        </div>
+      </div>
+    </div>
+  ) : null
 
   return (
     <>
@@ -807,7 +888,7 @@ export function WhatsAppBand() {
           <button
             type="button"
             className="button button-outline"
-            onClick={() => setShowQR(true)}
+            onClick={handleOpenQR}
             style={{ minHeight: 48 }}
           >
             <QrCode size={18} aria-hidden="true" />
@@ -825,28 +906,7 @@ export function WhatsAppBand() {
         </div>
       </section>
 
-      {/* QR Code Modal */}
-      {showQR && (
-        <div className="modal-backdrop" onClick={() => setShowQR(false)} role="dialog" aria-modal="true">
-          <div className="modal-card" style={{ textAlign: 'center' }} onClick={(e) => e.stopPropagation()}>
-            <h3 style={{ marginTop: 0 }}>Scan to chat on WhatsApp</h3>
-            <p style={{ color: 'var(--muted)', fontSize: 15 }}>
-              Point your smartphone camera to connect with the DialSafe verification bot.
-            </p>
-            <div style={{ background: '#FFF', padding: 20, borderRadius: 20, display: 'inline-block', margin: '16px auto', border: '1px solid var(--line)' }}>
-              <QRCodeSVG value={whatsappLink} size={200} />
-            </div>
-            <p style={{ fontSize: 14, color: 'var(--muted)' }}>
-              Twilio WhatsApp Sandbox join instruction supported.
-            </p>
-            <div style={{ marginTop: 20 }}>
-              <button type="button" className="button button-dark" onClick={() => setShowQR(false)}>
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {typeof document !== 'undefined' && qrModal ? createPortal(qrModal, document.body) : qrModal}
     </>
   )
 }

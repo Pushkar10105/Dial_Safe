@@ -177,8 +177,16 @@ main{max-width:1280px;margin:0 auto;padding:0 32px 100px}
 .transcript-action-btn:hover{background:var(--charcoal)}
 .transcript-action-btn:active{transform:scale(0.96)}
 .voice-sound-toggle{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--line);font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;padding:4px 10px;border-radius:var(--radius-pill);transition:color var(--t-fast) var(--ease-out),border-color var(--t-fast) var(--ease-out)}
-.voice-sound-toggle:hover{color:var(--ink);border-color:var(--ink)}
 .voice-sound-toggle.speaking{color:var(--orange);border-color:var(--orbit);background:rgba(243,115,56,0.08)}
+
+/* QR Modal & Skeleton Scanning Animation */
+.qr-container-box{width:240px;height:240px;background:#FFF;border:1.5px solid var(--line);border-radius:24px;display:flex;align-items:center;justify-content:center;margin:16px auto;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.qr-skeleton{width:200px;height:200px;border-radius:18px;background:#F3F0EE;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.qr-scan-line{position:absolute;top:0;left:0;right:0;height:3px;background:var(--orbit);box-shadow:0 0 10px 2px var(--orange);animation:qrScan 1.2s ease-in-out infinite alternate}
+@keyframes qrScan{0%{transform:translateY(0)}100%{transform:translateY(197px)}}
+.qr-code-rendered{animation:qrPop 260ms var(--ease-out) both;display:flex;align-items:center;justify-content:center}
+@keyframes qrPop{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
+
 .success-card{background:var(--paper);border:1.5px solid var(--line);border-radius:var(--radius-card);padding:36px;animation:verdictRise 300ms var(--ease-out) both}
 .success-tick-svg path{stroke-dasharray:40;stroke-dashoffset:40;animation:drawTick 300ms var(--ease-out) forwards 100ms}
 .copy-button{border:1.5px solid var(--ink);border-radius:var(--radius-pill);background:transparent;padding:8px 16px;display:inline-flex;gap:8px;align-items:center;font-weight:600;font-size:15px;cursor:pointer;transition:transform var(--t-press) var(--ease-out),background-color var(--t-fast) var(--ease-out)}
