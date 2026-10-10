@@ -90,7 +90,7 @@ export async function getStats() {
     const data = await res.json()
     return {
       totals: { checks: data.totals?.checks ?? 0, reports: data.totals?.reports ?? 0, brands: data.totals?.brands ?? brands.length },
-      recentChecks: Array.isArray(data.recentChecks) ? data.recentChecks.map(item => { const { label, code } = parseVerdict(item.verdict); return { number: item.number, verdict: label, verdictCode: code, score: typeof item.score === 'number' ? Math.round(item.score <= 1 ? item.score * 100 : item.score) : 50, createdAt: item.createdAt || 'Recent', reportCount: item.reportCount ?? 0 } }) : [],
+      recentChecks: Array.isArray(data.recentChecks) ? data.recentChecks.map(item => { const { label, code } = parseVerdict(item.verdict); return { number: item.number, verdict: label, verdictCode: code, score: typeof item.score === 'number' ? Math.round(item.score <= 1 ? item.score * 100 : item.score) : 50, createdAt: item.createdAt || 'Recent', reportCount: typeof item.reportCount === 'number' ? item.reportCount : (item.report_count ?? 0) } }) : [],
       recentReports: Array.isArray(data.recentReports) ? data.recentReports.map(item => ({ number: item.number, brand: item.brand || 'Unspecified', createdAt: item.createdAt || 'Recent' })) : [],
     }
   } catch { await delay(200); return mockStats() }

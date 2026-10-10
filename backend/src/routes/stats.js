@@ -26,6 +26,7 @@ router.get('/', async (req, res, next) => {
         number: c.number,
         maskedNumber: maskNumber(c.number),
         verdict: c.verdict,
+        reportCount: c.reportCount ?? 0,
         createdAt: c.createdAt
       })),
       recentReports: recentReports.map(r => ({

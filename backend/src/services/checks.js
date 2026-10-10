@@ -33,9 +33,15 @@ async function logCheck({ number, brand = null, verdict, score = 0, channel = 'w
  */
 async function getRecentChecks(limit = 10) {
   const sql = `
-    SELECT number, brand, verdict, created_at
-    FROM checks
-    ORDER BY created_at DESC
+    SELECT c.number, c.brand, c.verdict, c.created_at,
+           COALESCE(r.report_count, 0)::int AS report_count
+    FROM checks c
+    LEFT JOIN (
+      SELECT number, COUNT(*)::int AS report_count
+      FROM reports
+      GROUP BY number
+    ) r ON r.number = c.number
+    ORDER BY c.created_at DESC
     LIMIT $1;
   `;
   const res = await db.query(sql, [limit]);
@@ -43,6 +49,7 @@ async function getRecentChecks(limit = 10) {
     number: row.number,
     brand: row.brand,
     verdict: row.verdict,
+    reportCount: row.report_count ?? 0,
     createdAt: row.created_at.toISOString()
   }));
 }
