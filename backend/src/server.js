@@ -86,6 +86,14 @@ app.use('/stats', statsRouter);
 app.use('/whatsapp', whatsappRouter);
 app.use('/message', messageRouter);
 
+// Also accept WhatsApp webhooks posted directly to root URL
+app.post('/', (req, res, next) => {
+  if (req.body?.From || req.body?.Body || req.headers['x-twilio-signature']) {
+    return whatsappRouter(req, res, next);
+  }
+  next();
+});
+
 // Root greeting / info
 app.get('/', (req, res) => {
   res.json({
