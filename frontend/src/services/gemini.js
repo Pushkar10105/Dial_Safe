@@ -97,8 +97,8 @@ export async function processVoiceQuery({ text, lang = 'en', apiKey = '' }) {
   const brands = await fetchBrands();
 
   // 1. Detect if text contains a phone number candidate
-  const phoneMatch = text.match(/(?:\+91[\-\s]?)?[6-9]\d{9}\b|\b(?:1800|1860)\d{6,7}\b/);
-  const foundNumber = phoneMatch ? phoneMatch[0].replace(/[\s\-]/g, '') : null;
+  const phoneMatch = text.match(/(?:\+91[-\s]?)?[6-9]\d{9}\b|\b(?:1800|1860)\d{6,7}\b/);
+  const foundNumber = phoneMatch ? phoneMatch[0].replace(/[\s-]/g, '') : null;
 
   // 2. Detect if text mentions a brand
   const matchedBrand = findBrandInText(text, brands);

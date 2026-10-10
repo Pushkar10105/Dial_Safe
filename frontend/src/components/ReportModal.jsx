@@ -42,7 +42,7 @@ export default function ReportModal({ isOpen, onClose, initialNumber = '', initi
     <div className="modal-overlay" id="report-modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
         <div className="modal-header">
-          <h3 style={{ fontSize: '18px', color: '#fff' }}>Report Suspected Scam Number</h3>
+          <h3 style={{ fontSize: '18px', color: 'var(--ink)' }}>Report Suspected Scam Number</h3>
           <button type="button" className="modal-close-btn" onClick={onClose}>
             &times;
           </button>
@@ -53,7 +53,7 @@ export default function ReportModal({ isOpen, onClose, initialNumber = '', initi
             <div style={{ textAlign: 'center', padding: '20px 0' }}>
               <div style={{ fontSize: '42px', marginBottom: '14px' }}>🛡️</div>
               <h4 style={{ fontSize: '20px', color: '#10b981', marginBottom: '8px' }}>Report Submitted</h4>
-              <p style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '24px' }}>
+              <p style={{ fontSize: '14px', color: 'var(--muted)', marginBottom: '24px' }}>
                 Thank you! Your report has been added to our shared database and will protect others from fake customer care scams.
               </p>
               <button type="button" className="btn btn-primary" onClick={handleReset}>
@@ -62,12 +62,12 @@ export default function ReportModal({ isOpen, onClose, initialNumber = '', initi
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <p style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
+              <p style={{ fontSize: '14px', color: 'var(--muted)' }}>
                 Help protect others by flagging fraudulent numbers, fake support lines, and OTP phishing attempts.
               </p>
 
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: '#cbd5e1' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--ink)' }}>
                   Phone Number *
                 </label>
                 <input
@@ -83,7 +83,7 @@ export default function ReportModal({ isOpen, onClose, initialNumber = '', initi
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: '#cbd5e1' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--ink)' }}>
                   Claimed Company / Brand (Optional)
                 </label>
                 <input
@@ -98,7 +98,7 @@ export default function ReportModal({ isOpen, onClose, initialNumber = '', initi
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: '#cbd5e1' }}>
+                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', marginBottom: '6px', color: 'var(--ink)' }}>
                   Incident Description (Optional)
                 </label>
                 <textarea
