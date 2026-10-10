@@ -72,10 +72,19 @@ export default function FindPage({ onOpenVoice }) {
     setSearchParams({}, { replace: true })
   }
 
-  const filtered = brandsList.filter((b) =>
-    b.brand.toLowerCase().includes(query.toLowerCase()) ||
-    (Array.isArray(b.officialNumbers) && b.officialNumbers.some((num) => num.includes(query)))
-  )
+  const cleanQuery = query.trim().toLowerCase()
+  const filtered = brandsList.filter((b) => {
+    if (!cleanQuery) return true
+    const brandName = (b.brand || b.name || '').toLowerCase()
+    const matchesName = brandName.includes(cleanQuery)
+    const matchesAlias = Array.isArray(b.aliases) && b.aliases.some((a) => {
+      const lowerA = a.toLowerCase()
+      return lowerA.includes(cleanQuery) || cleanQuery.includes(lowerA)
+    })
+    const numbers = b.officialNumbers || b.official_numbers || []
+    const matchesNumber = Array.isArray(numbers) && numbers.some((num) => String(num).includes(cleanQuery))
+    return matchesName || matchesAlias || matchesNumber
+  })
 
   return (
     <Shell onOpenVoice={onOpenVoice}>
@@ -97,7 +106,7 @@ export default function FindPage({ onOpenVoice }) {
               className="search-input"
               value={query}
               onChange={(e) => handleQueryChange(e.target.value)}
-              placeholder="Type a company name (e.g. Bank, Food, Payments)..."
+              placeholder="Search SBI, Zomato, Paytm, HDFC, Swiggy, Flipkart..."
               style={{ paddingRight: 48 }}
             />
             {query ? (
@@ -140,7 +149,7 @@ export default function FindPage({ onOpenVoice }) {
             {filtered.length > 0 ? (
               <div className="brand-list">
                 {filtered.map((brand) => (
-                  <BrandCard key={brand.brand} brand={brand} />
+                  <BrandCard key={brand.brand || brand.name} brand={brand} />
                 ))}
               </div>
             ) : (

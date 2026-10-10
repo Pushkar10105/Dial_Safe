@@ -588,10 +588,14 @@ export function VerdictCard({ result }) {
    Brand Card
    ========================================================================== */
 export function BrandCard({ brand }) {
+  const brandName = brand.brand || brand.name || ''
+  const numbers = brand.officialNumbers || brand.official_numbers || []
+  const hasPhone = numbers.length > 0 && !!numbers[0]
+
   return (
-    <Link className="brand-card card-link" to={`/brand/${encodeURIComponent(brand.brand)}`}>
+    <Link className="brand-card card-link" to={`/brand/${encodeURIComponent(brandName)}`}>
       <div>
-        <h2>{brand.brand}</h2>
+        <h2>{brandName}</h2>
         {brand.sample && (
           <span
             style={{
@@ -609,8 +613,8 @@ export function BrandCard({ brand }) {
         )}
       </div>
 
-      <span style={{ fontSize: 18, fontWeight: 600, color: 'var(--ink)' }}>
-        {brand.officialNumbers[0] ? formatNumber(brand.officialNumbers[0]) : 'Listed official'}
+      <span style={{ fontSize: 16, fontWeight: 600, color: hasPhone ? 'var(--ink)' : 'var(--muted)' }}>
+        {hasPhone ? formatNumber(numbers[0]) : 'In-App Support Only'}
       </span>
 
       <span className="satellite-cta" aria-hidden="true">
