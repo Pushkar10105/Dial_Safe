@@ -270,7 +270,7 @@ export function Navbar({ onOpenVoice }) {
    Footer Component (Warm Ink Black #141413, 4-column layout)
    ========================================================================== */
 export function Footer() {
-  const whatsappLink = import.meta.env.VITE_WHATSAPP_LINK || 'https://wa.me/910000000000'
+  const whatsappLink = import.meta.env.VITE_WHATSAPP_LINK || 'https://wa.me/14155238886?text=join%20father-tonight'
 
   const handleFooterCheckClick = (e) => {
     if (window.location.pathname === '/') {
@@ -875,7 +875,7 @@ export function ReportSuccessCard({ reportCount, onDismiss }) {
 export function WhatsAppBand() {
   const [showQR, setShowQR] = useState(false)
   const [qrLoading, setQrLoading] = useState(true)
-  const whatsappLink = import.meta.env.VITE_WHATSAPP_LINK || 'https://wa.me/910000000000'
+  const whatsappLink = import.meta.env.VITE_WHATSAPP_LINK || 'https://wa.me/14155238886?text=join%20father-tonight'
 
   const handleOpenQR = () => {
     setQrLoading(true)

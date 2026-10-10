@@ -141,8 +141,8 @@ router.post('/', async (req, res) => {
       lines.push('──────────────────');
       detectionResult.advice.forEach(a => lines.push(`ℹ️ ${a}`));
     }
-    lines.push('──────────────────');
-    lines.push(`🔗 Full details: ${config.frontendUrl}/number/${encodeURIComponent(foundNumber)}`);
+    const cleanFrontendUrl = (config.frontendUrl || 'http://localhost:5173').replace(/\/+$/, '');
+    lines.push(`🔗 Full details: ${cleanFrontendUrl}/number/${encodeURIComponent(foundNumber)}`);
 
     return res.send(buildTwiML(lines.join('\n')));
   }
