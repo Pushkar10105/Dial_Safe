@@ -9,6 +9,24 @@ import {
 } from '../components/dialsafe.jsx'
 
 export default function Home({ onOpenVoice }) {
+  const handleScrollToCheck = (e) => {
+    if (e) e.preventDefault()
+    const input = document.getElementById('phone-number')
+    if (input) {
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      setTimeout(() => {
+        input.focus()
+      }, 300)
+    } else {
+      const form = document.getElementById('check')
+      if (form) {
+        form.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    }
+  }
+
   return (
     <Shell onOpenVoice={onOpenVoice}>
       {/* Hero Section */}
@@ -54,7 +72,12 @@ export default function Home({ onOpenVoice }) {
         </div>
 
         <div className="choice-grid">
-          <a className="choice-card dark-choice card-link" href="#check">
+          <a
+            className="choice-card dark-choice card-link"
+            href="#check"
+            onClick={handleScrollToCheck}
+            style={{ cursor: 'pointer' }}
+          >
             <span className="choice-icon" aria-hidden="true">
               <Search size={32} />
             </span>

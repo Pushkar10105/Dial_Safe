@@ -110,6 +110,19 @@ export function Navbar({ onOpenVoice }) {
     }
   }
 
+  const handleCheckClick = (e) => {
+    if (pathname === '/') {
+      if (e) e.preventDefault()
+      const input = document.getElementById('phone-number')
+      if (input) {
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        setTimeout(() => input.focus(), 300)
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    }
+  }
+
   return (
     <div className="topbar-wrapper">
       <header className={`topbar ${scrolled ? 'scrolled' : ''}`}>
@@ -173,7 +186,12 @@ export function Navbar({ onOpenVoice }) {
           </button>
         )}
 
-        <Link className="button button-dark" style={{ minHeight: 44, padding: '8px 18px', fontSize: 15 }} to="/#check">
+        <Link
+          className="button button-dark"
+          style={{ minHeight: 44, padding: '8px 18px', fontSize: 15 }}
+          to="/#check"
+          onClick={handleCheckClick}
+        >
           Check a number <ArrowRight size={16} aria-hidden="true" />
         </Link>
 
@@ -229,7 +247,15 @@ export function Navbar({ onOpenVoice }) {
                   🎙️ Voice Assistant (Elder Help)
                 </button>
               )}
-              <Link to="/#check" className="button button-dark" style={{ marginTop: 8 }}>
+              <Link
+                to="/#check"
+                className="button button-dark"
+                style={{ marginTop: 8 }}
+                onClick={(e) => {
+                  setMenuOpen(false)
+                  handleCheckClick(e)
+                }}
+              >
                 Check a number
               </Link>
             </nav>
@@ -246,6 +272,19 @@ export function Navbar({ onOpenVoice }) {
 export function Footer() {
   const whatsappLink = import.meta.env.VITE_WHATSAPP_LINK || 'https://wa.me/910000000000'
 
+  const handleFooterCheckClick = (e) => {
+    if (window.location.pathname === '/') {
+      e.preventDefault()
+      const input = document.getElementById('phone-number')
+      if (input) {
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        setTimeout(() => input.focus(), 300)
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    }
+  }
+
   return (
     <footer className="footer">
       <div className="footer-inner">
@@ -255,7 +294,11 @@ export function Footer() {
           <div className="footer-col">
             <h4>Check & Verify</h4>
             <ul>
-              <li><Link to="/#check">Check a phone number</Link></li>
+              <li>
+                <Link to="/#check" onClick={handleFooterCheckClick}>
+                  Check a phone number
+                </Link>
+              </li>
               <li><Link to="/find">Official brand directory</Link></li>
               <li><Link to="/report">Report a scam number</Link></li>
               <li><Link to="/dashboard">Recent activity dashboard</Link></li>
