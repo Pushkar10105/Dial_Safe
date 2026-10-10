@@ -1,4 +1,4 @@
-﻿// lib/api.js
+// lib/api.js
 import { mockCheck, mockBrand, mockStats, brands, parseVerdict } from './mock-data.js'
 
 const rawBaseUrl = import.meta.env.VITE_API_URL || ''
@@ -44,7 +44,17 @@ export async function getBrand(name) {
     const res = await fetchWithTimeout(`${API_BASE}/brand/${encodeURIComponent(decoded)}`)
     if (!res.ok) throw new Error(`${res.status}`)
     const data = await res.json()
-    return { brand: data.brand || decoded, officialNumbers: Array.isArray(data.officialNumbers) ? data.officialNumbers : [], sourceUrl: data.sourceUrl || '#', lastChecked: data.lastChecked || new Date().toISOString().split('T')[0], knownFakeNumbers: Array.isArray(data.knownFakeNumbers) ? data.knownFakeNumbers : [], sample: data.sample ?? false }
+    return {
+      brand: data.brand || data.name || decoded,
+      name: data.name || data.brand || decoded,
+      officialNumbers: Array.isArray(data.officialNumbers) ? data.officialNumbers : (Array.isArray(data.official_numbers) ? data.official_numbers : []),
+      sourceUrl: data.sourceUrl || data.source_url || '#',
+      lastChecked: data.lastChecked || data.last_checked || new Date().toISOString().split('T')[0],
+      knownFakeNumbers: Array.isArray(data.knownFakeNumbers) ? data.knownFakeNumbers : (Array.isArray(data.known_fake_numbers) ? data.known_fake_numbers : []),
+      sample: data.sample ?? false,
+      supportChannel: data.supportChannel || ((data.officialNumbers?.length || data.official_numbers?.length) ? 'phone' : 'app'),
+      supportNote: data.supportNote || ''
+    }
   } catch { await delay(200); return mockBrand(decoded) }
 }
 
@@ -54,7 +64,21 @@ export async function getAllBrands() {
     const res = await fetchWithTimeout(`${API_BASE}/brands`)
     if (!res.ok) return brands
     const data = await res.json()
-    return Array.isArray(data) ? data : Array.isArray(data.brands) ? data.brands : brands
+    const list = Array.isArray(data) ? data : Array.isArray(data.brands) ? data.brands : null
+    if (!list) return brands
+    return list.map(b => ({
+      brand: b.brand || b.name,
+      name: b.name || b.brand,
+      aliases: b.aliases || [],
+      officialNumbers: b.officialNumbers || b.official_numbers || [],
+      official_numbers: b.official_numbers || b.officialNumbers || [],
+      sourceUrl: b.sourceUrl || b.source_url || '#',
+      lastChecked: b.lastChecked || b.last_checked || new Date().toISOString().split('T')[0],
+      knownFakeNumbers: b.knownFakeNumbers || b.known_fake_numbers || [],
+      sample: b.sample ?? false,
+      supportChannel: b.supportChannel || ((b.officialNumbers?.length || b.official_numbers?.length) ? 'phone' : 'app'),
+      supportNote: b.supportNote || ''
+    }))
   } catch { return brands }
 }
 

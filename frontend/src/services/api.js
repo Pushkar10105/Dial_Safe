@@ -4,88 +4,61 @@
  * Strictly implements docs/API_CONTRACT.md with offline fallback.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+import { brands as verifiedBrands } from '../lib/mock-data.js';
 
-// Seed brands fallback in case backend is offline during frontend demo
-const FALLBACK_BRANDS = [
-  {
-    id: 1,
-    name: 'Zomato',
-    aliases: ['zomato', 'zomato care', 'zomato delivery'],
-    official_numbers: ['+918069696969'],
-    source_url: 'https://www.zomato.com/contact',
-    last_checked: '2026-10-01',
-    known_fake_numbers: ['+919999988888']
-  },
-  {
-    id: 2,
-    name: 'Swiggy',
-    aliases: ['swiggy', 'swiggy care', 'swiggy support'],
-    official_numbers: ['08067466729'],
-    source_url: 'https://www.swiggy.com/support',
-    last_checked: '2026-10-01',
-    known_fake_numbers: []
-  },
-  {
-    id: 3,
-    name: 'State Bank of India',
-    aliases: ['sbi', 'sbi bank', 'state bank'],
-    official_numbers: ['18001234', '18002100', '1800112211'],
-    source_url: 'https://sbi.co.in/web/customer-care',
-    last_checked: '2026-10-01',
-    known_fake_numbers: ['+919876500000']
-  },
-  {
-    id: 4,
-    name: 'HDFC Bank',
-    aliases: ['hdfc', 'hdfc bank'],
-    official_numbers: ['18001600', '18002600'],
-    source_url: 'https://www.hdfcbank.com/personal/need-help/customer-care',
-    last_checked: '2026-10-01',
-    known_fake_numbers: []
-  },
-  {
-    id: 5,
-    name: 'Amazon India',
-    aliases: ['amazon', 'amazon india', 'amazon care'],
-    official_numbers: ['180030009009'],
-    source_url: 'https://www.amazon.in/contact-us',
-    last_checked: '2026-10-01',
-    known_fake_numbers: []
-  },
-  {
-    id: 6,
-    name: 'Flipkart',
-    aliases: ['flipkart', 'flipkart support', 'flipkart care'],
-    official_numbers: ['18002029898'],
-    source_url: 'https://www.flipkart.com/helpcentre',
-    last_checked: '2026-10-01',
-    known_fake_numbers: []
-  }
-];
+const rawApiUrl = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || '';
+const API_BASE_URL = rawApiUrl.replace(/\/+$/, '');
+
+// Seed brands fallback in case backend is offline or during frontend demo
+export const FALLBACK_BRANDS = verifiedBrands.map((b, idx) => ({
+  id: idx + 1,
+  name: b.brand,
+  brand: b.brand,
+  aliases: b.aliases || [],
+  official_numbers: b.officialNumbers || [],
+  officialNumbers: b.officialNumbers || [],
+  source_url: b.sourceUrl,
+  sourceUrl: b.sourceUrl,
+  last_checked: b.lastChecked,
+  lastChecked: b.lastChecked,
+  known_fake_numbers: b.knownFakeNumbers || [],
+  knownFakeNumbers: b.knownFakeNumbers || [],
+  supportChannel: b.supportChannel || 'phone',
+  supportNote: b.supportNote || ''
+}));
 
 export async function checkNumber(number, brand = '') {
-  try {
-    const res = await fetch(`${API_BASE_URL}/check`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ number, brand: brand || undefined })
-    });
-    if (res.ok) {
-      return await res.json();
+  // If no API_BASE_URL or attempting localhost from a remote origin, use instant fallback
+  const isLocalOnRemote = typeof window !== 'undefined' && 
+    API_BASE_URL.includes('localhost') && 
+    window.location.hostname !== 'localhost' && 
+    window.location.hostname !== '127.0.0.1';
+
+  if (API_BASE_URL && !isLocalOnRemote) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/check`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ number, brand: brand || undefined })
+      });
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      console.warn('[API] Backend unreachable, using client heuristic fallback:', err.message);
     }
-  } catch (err) {
-    console.warn('[API] Backend unreachable, using client heuristic fallback:', err.message);
   }
 
   // Graceful client fallback
-  const cleanNumber = number.replace(/[\s\-\(\)]/g, '');
+  const cleanNumber = number.replace(/[\s\-()]/g, '');
+  const digits = cleanNumber.replace(/\D/g, '');
+
   const matchedBrand = FALLBACK_BRANDS.find(b => 
-    (brand && b.name.toLowerCase().includes(brand.toLowerCase())) ||
-    b.official_numbers.includes(cleanNumber)
+    (brand && (b.name.toLowerCase().includes(brand.toLowerCase()) || b.aliases?.some(a => a.toLowerCase().includes(brand.toLowerCase())))) ||
+    b.official_numbers.some(n => digits.endsWith(n) || n.endsWith(digits) || n === digits)
   );
 
-  if (matchedBrand && matchedBrand.official_numbers.includes(cleanNumber)) {
+  if (matchedBrand && matchedBrand.official_numbers.some(n => digits.endsWith(n) || n.endsWith(digits) || n === digits)) {
     return {
       ok: true,
       number: cleanNumber,
@@ -96,12 +69,12 @@ export async function checkNumber(number, brand = '') {
       reportCount: 0,
       brand: matchedBrand.name,
       officialNumber: matchedBrand.official_numbers[0],
-      detailUrl: `${window.location.origin}#number-${cleanNumber}`,
+      detailUrl: `${typeof window !== 'undefined' ? window.location.origin : ''}#number-${cleanNumber}`,
       advice: ['Verified official contact number.']
     };
   }
 
-  if (matchedBrand && !matchedBrand.official_numbers.includes(cleanNumber)) {
+  if (matchedBrand && (!matchedBrand.official_numbers.length || !matchedBrand.official_numbers.some(n => digits.endsWith(n) || n.endsWith(digits) || n === digits))) {
     return {
       ok: true,
       number: cleanNumber,
@@ -111,8 +84,8 @@ export async function checkNumber(number, brand = '') {
       reasons: [`This is not an official contact number for ${matchedBrand.name}.`],
       reportCount: 2,
       brand: matchedBrand.name,
-      officialNumber: matchedBrand.official_numbers[0],
-      detailUrl: `${window.location.origin}#number-${cleanNumber}`,
+      officialNumber: matchedBrand.official_numbers[0] || null,
+      detailUrl: `${typeof window !== 'undefined' ? window.location.origin : ''}#number-${cleanNumber}`,
       advice: [
         'Do not share OTPs, PINs, or banking details.',
         'Report cyber fraud at cybercrime.gov.in or call 1930.'
@@ -130,7 +103,7 @@ export async function checkNumber(number, brand = '') {
     reportCount: 0,
     brand: null,
     officialNumber: null,
-    detailUrl: `${window.location.origin}#number-${cleanNumber}`,
+    detailUrl: `${typeof window !== 'undefined' ? window.location.origin : ''}#number-${cleanNumber}`,
     advice: [
       'We cannot confirm this number either way. Check the company\'s official website or mobile app.',
       'Do not share passwords, OTPs, or financial details.'
@@ -139,55 +112,93 @@ export async function checkNumber(number, brand = '') {
 }
 
 export async function reportScam(number, brand = '', note = '') {
-  try {
-    const res = await fetch(`${API_BASE_URL}/report`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ number, brand: brand || undefined, note: note || undefined })
-    });
-    if (res.ok) {
-      return await res.json();
+  const isLocalOnRemote = typeof window !== 'undefined' && 
+    API_BASE_URL.includes('localhost') && 
+    window.location.hostname !== 'localhost' && 
+    window.location.hostname !== '127.0.0.1';
+
+  if (API_BASE_URL && !isLocalOnRemote) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/report`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ number, brand: brand || undefined, note: note || undefined })
+      });
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      console.warn('[API] Backend unreachable for report, simulating response:', err.message);
     }
-  } catch (err) {
-    console.warn('[API] Backend unreachable for report, simulating response:', err.message);
   }
 
   return { ok: true, reportCount: 1 };
 }
 
 export async function fetchBrands() {
-  try {
-    const res = await fetch(`${API_BASE_URL}/brands`);
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) return data;
-      if (Array.isArray(data.brands)) return data.brands;
+  const isLocalOnRemote = typeof window !== 'undefined' && 
+    API_BASE_URL.includes('localhost') && 
+    window.location.hostname !== 'localhost' && 
+    window.location.hostname !== '127.0.0.1';
+
+  if (API_BASE_URL && !isLocalOnRemote) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/brands`);
+      if (res.ok) {
+        const data = await res.json();
+        const raw = Array.isArray(data) ? data : Array.isArray(data.brands) ? data.brands : null;
+        if (raw && raw.length > 0) {
+          return raw.map((b, idx) => ({
+            id: b.id || idx + 1,
+            name: b.name || b.brand,
+            brand: b.brand || b.name,
+            aliases: b.aliases || [],
+            official_numbers: b.official_numbers || b.officialNumbers || [],
+            officialNumbers: b.officialNumbers || b.official_numbers || [],
+            source_url: b.source_url || b.sourceUrl || '#',
+            sourceUrl: b.sourceUrl || b.source_url || '#',
+            last_checked: b.last_checked || b.lastChecked || new Date().toISOString().split('T')[0],
+            lastChecked: b.lastChecked || b.last_checked || new Date().toISOString().split('T')[0],
+            known_fake_numbers: b.known_fake_numbers || b.knownFakeNumbers || [],
+            knownFakeNumbers: b.knownFakeNumbers || b.known_fake_numbers || [],
+            supportChannel: b.supportChannel || ((b.officialNumbers?.length || b.official_numbers?.length) ? 'phone' : 'app'),
+            supportNote: b.supportNote || ''
+          }));
+        }
+      }
+    } catch (err) {
+      // fallback
     }
-  } catch (err) {
-    // fallback
   }
   return FALLBACK_BRANDS;
 }
 
 export async function fetchStats() {
-  try {
-    const res = await fetch(`${API_BASE_URL}/stats`);
-    if (res.ok) {
-      return await res.json();
+  const isLocalOnRemote = typeof window !== 'undefined' && 
+    API_BASE_URL.includes('localhost') && 
+    window.location.hostname !== 'localhost' && 
+    window.location.hostname !== '127.0.0.1';
+
+  if (API_BASE_URL && !isLocalOnRemote) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/stats`);
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (err) {
+      // fallback
     }
-  } catch (err) {
-    // fallback
   }
   return {
-    totals: { checks: 142, reports: 38, brands: 6 },
+    totals: { checks: 184, reports: 47, brands: FALLBACK_BRANDS.length },
     recentChecks: [
-      { number: '+91 98xxx xx210', verdict: 'High risk', createdAt: new Date(Date.now() - 1000 * 60 * 12).toISOString() },
+      { number: '+91 00000 00002', verdict: 'High risk', createdAt: new Date(Date.now() - 1000 * 60 * 12).toISOString() },
       { number: '1800 1234', verdict: 'Verified official', createdAt: new Date(Date.now() - 1000 * 60 * 35).toISOString() },
-      { number: '+91 80xxx xx969', verdict: 'Verified official', createdAt: new Date(Date.now() - 1000 * 60 * 75).toISOString() }
+      { number: '+91 00000 00009', verdict: 'Suspicious', createdAt: new Date(Date.now() - 1000 * 60 * 75).toISOString() }
     ],
     recentReports: [
-      { number: '+91 98xxx xx210', brand: 'Zomato', createdAt: new Date(Date.now() - 1000 * 60 * 10).toISOString() },
-      { number: '+91 91xxx xx789', brand: 'SBI', createdAt: new Date(Date.now() - 1000 * 60 * 55).toISOString() }
+      { number: '+91 00000 00002', brand: 'State Bank of India', createdAt: new Date(Date.now() - 1000 * 60 * 10).toISOString() },
+      { number: '+91 00000 00001', brand: 'Zomato', createdAt: new Date(Date.now() - 1000 * 60 * 55).toISOString() }
     ]
   };
 }

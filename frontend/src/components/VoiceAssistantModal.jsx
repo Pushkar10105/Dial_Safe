@@ -251,6 +251,42 @@ export default function VoiceAssistantModal({ isOpen, onClose, onCheckNumber }) 
             )}
           </div>
 
+          {/* Fallback Type-to-Ask Input for testing or when mic is disabled */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const input = e.target.elements.queryInput;
+              if (input && input.value.trim()) {
+                handleQuickPrompt(input.value.trim());
+                input.value = '';
+              }
+            }}
+            style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}
+          >
+            <input
+              name="queryInput"
+              type="text"
+              placeholder={selectedLang === 'hi' ? 'या यहाँ लिखें (उदा. SBI हेल्पलाइन, जोमैटो)...' : selectedLang === 'ta' ? 'அல்லது இங்கே தட்டச்சு செய்யவும் (SBI, Zomato)...' : 'Or type query (e.g. SBI helpline, Zomato care)...'}
+              style={{
+                flex: 1,
+                padding: '9px 13px',
+                borderRadius: '8px',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                background: 'rgba(255, 255, 255, 0.06)',
+                color: '#fff',
+                fontSize: '14px',
+                outline: 'none'
+              }}
+            />
+            <button
+              type="submit"
+              className="btn btn-primary btn-sm"
+              style={{ padding: '0 16px', fontWeight: 600, whiteSpace: 'nowrap' }}
+            >
+              Ask / पूछें
+            </button>
+          </form>
+
           {/* Error Notice */}
           {errorMessage && (
             <div style={{ padding: '10px 14px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '8px', color: '#fca5a5', fontSize: '13px', marginBottom: '12px' }}>

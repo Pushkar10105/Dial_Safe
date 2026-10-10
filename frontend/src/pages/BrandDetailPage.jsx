@@ -100,35 +100,55 @@ export default function BrandDetailPage({ onOpenVoice }) {
                 marginTop: 20,
               }}
             >
-              <h2 style={{ fontSize: 24, marginTop: 0 }}>Official contact number</h2>
-
-              {brand.officialNumbers && brand.officialNumbers.map((number) => (
-                <div
-                  key={number}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    borderBottom: '1px solid var(--line)',
-                    padding: '16px 0',
-                    flexWrap: 'wrap',
-                    gap: 12,
-                  }}
-                >
-                  <a
-                    href={`tel:${number.replace(/\D/g, '')}`}
-                    style={{ fontSize: 28, fontWeight: 700, color: 'var(--ink)' }}
-                    className="tap-to-call"
+              {brand.officialNumbers && brand.officialNumbers.length > 0 ? (
+                <>
+                  <h2 style={{ fontSize: 24, marginTop: 0 }}>Official contact number</h2>
+                  {brand.officialNumbers.map((number) => (
+                    <div
+                      key={number}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        borderBottom: '1px solid var(--line)',
+                        padding: '16px 0',
+                        flexWrap: 'wrap',
+                        gap: 12,
+                      }}
+                    >
+                      <a
+                        href={`tel:${number.replace(/\D/g, '')}`}
+                        style={{ fontSize: 28, fontWeight: 700, color: 'var(--ink)' }}
+                        className="tap-to-call"
+                      >
+                        {formatNumber(number)}
+                      </a>
+                      <CopyNumber number={number} />
+                    </div>
+                  ))}
+                  <p style={{ color: 'var(--muted)', fontSize: 15, marginTop: 14 }}>
+                    Tap the number to call directly. Always cross-verify on the company&apos;s own app or website.
+                  </p>
+                </>
+              ) : (
+                <div style={{ padding: '8px 0 16px' }}>
+                  <div
+                    style={{
+                      background: 'rgba(234, 88, 12, 0.08)',
+                      border: '1.5px solid rgba(234, 88, 12, 0.3)',
+                      borderRadius: 16,
+                      padding: '20px 24px',
+                    }}
                   >
-                    {formatNumber(number)}
-                  </a>
-                  <CopyNumber number={number} />
+                    <h3 style={{ margin: '0 0 10px', color: '#c2410c', fontSize: 18, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span>📱</span> In-App Support Only — No Public Phone Number
+                    </h3>
+                    <p style={{ margin: 0, fontSize: 15, color: 'var(--ink)', lineHeight: 1.6 }}>
+                      {brand.supportNote || `${brand.brand} provides customer assistance exclusively through their official mobile app. Do not trust or call any phone numbers claiming to represent ${brand.brand} found on search engines or third-party websites.`}
+                    </p>
+                  </div>
                 </div>
-              ))}
-
-              <p style={{ color: 'var(--muted)', fontSize: 15, marginTop: 14 }}>
-                Tap the number to call directly. Always cross-verify on the company&apos;s own app or website.
-              </p>
+              )}
 
               <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
                 <a

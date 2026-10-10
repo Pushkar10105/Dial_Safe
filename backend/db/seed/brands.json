@@ -1,37 +1,156 @@
 [
   {
-    "name": "Zomato",
-    "aliases": ["zomato", "zomato care", "zomato support", "zomato ltd"],
-    "official_numbers": [],
-    "source_url": "https://www.zomato.com/contact",
-    "last_checked": "2026-10-08"
+    "name": "State Bank of India",
+    "aliases": ["sbi", "state bank", "sbi bank", "sbi care", "sbi helpline", "sbi customer care", "state bank of india", "एसबीआई", "स्टेट बैंक", "स्टेट बैंक ऑफ इंडिया", "எஸ்பிஐ"],
+    "official_numbers": ["18001234", "18002100", "18001112211", "18004253800"],
+    "source_url": "https://sbi.co.in/web/customer-care",
+    "last_checked": "2026-10-10"
   },
   {
-    "name": "Swiggy",
-    "aliases": ["swiggy", "swiggy care", "swiggy support", "swiggy instamart"],
-    "official_numbers": [],
-    "source_url": "https://www.swiggy.com/contact",
-    "last_checked": "2026-10-08"
+    "name": "HDFC Bank",
+    "aliases": ["hdfc", "hdfc bank", "hdfc care", "hdfc helpline", "hdfc customer care", "एचडीएफसी", "एचडीएफसी बैंक", "எச்டிஎஃப்சி"],
+    "official_numbers": ["18001600", "18002600"],
+    "source_url": "https://www.hdfcbank.com/personal/need-help/customer-care",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "ICICI Bank",
+    "aliases": ["icici", "icici bank", "icici care", "icici helpline", "icici customer care", "आईसीआईसीआई", "आईसीआईसीआई बैंक", "ஐசிஐசிஐ"],
+    "official_numbers": ["18001024242", "18001200"],
+    "source_url": "https://www.icicibank.com/contactus",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Axis Bank",
+    "aliases": ["axis bank", "axis", "axis care", "axis helpline", "axis customer care", "एक्सिस बैंक", "एक्सिस", "ஆக்சிஸ் வங்கி"],
+    "official_numbers": ["18004030", "18008911"],
+    "source_url": "https://www.axisbank.com/contact-us",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Kotak Mahindra Bank",
+    "aliases": ["kotak", "kotak mahindra", "kotak bank", "kotak care", "kotak helpline", "कोटक बैंक", "कोटक महिंद्रा", "கோடக் வங்கி"],
+    "official_numbers": ["18004100", "18002090000"],
+    "source_url": "https://www.kotak.com/en/customer-care.html",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Punjab National Bank",
+    "aliases": ["pnb", "punjab national bank", "pnb care", "pnb helpline", "पीएनबी", "पंजाब नेशनल बैंक", "பிஎன்பி"],
+    "official_numbers": ["18001800", "18002021"],
+    "source_url": "https://www.pnbindia.in/customer-care.html",
+    "last_checked": "2026-10-10"
   },
   {
     "name": "Paytm",
-    "aliases": ["paytm", "paytm care", "paytm payments bank", "paytm customer care"],
-    "official_numbers": [],
+    "aliases": ["paytm", "paytm care", "paytm payments bank", "paytm customer care", "paytm helpline", "पेटीएम", "पेटीम", "பேடிஎம்"],
+    "official_numbers": ["01204456456"],
     "source_url": "https://paytm.com/care",
-    "last_checked": "2026-10-08"
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Google Pay",
+    "aliases": ["google pay", "gpay", "googlepay", "google pay care", "google pay helpline", "गूगल पे", "जीपे", "கூகிள் பே"],
+    "official_numbers": ["18004190157"],
+    "source_url": "https://support.google.com/pay/answer/7625055",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "PhonePe",
+    "aliases": ["phonepe", "phone pe", "phonepe care", "phonepe helpline", "phonepe customer care", "फोनपे", "फ़ोनपे", "போன்பே"],
+    "official_numbers": [],
+    "source_url": "https://www.phonepe.com/contact-us/",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Reliance Jio",
+    "aliases": ["jio", "reliance jio", "jio care", "jio helpline", "jio customer care", "जियो", "रिलायंस जियो", "ஜியோ"],
+    "official_numbers": ["198", "199", "18008899999"],
+    "source_url": "https://www.jio.com/help/contact-us#/",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Bharti Airtel",
+    "aliases": ["airtel", "bharti airtel", "airtel care", "airtel helpline", "airtel customer care", "एयरटेल", "भारती एयरटेल", "ஏர்டெல்"],
+    "official_numbers": ["121", "198"],
+    "source_url": "https://www.airtel.in",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Vodafone Idea (Vi)",
+    "aliases": ["vi", "vodafone idea", "vodafone", "idea", "vi care", "vi helpline", "वीआई", "वोडाफोन", "விஐ"],
+    "official_numbers": ["199", "198"],
+    "source_url": "https://www.myvi.in",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Zomato",
+    "aliases": ["zomato", "zomato care", "zomato support", "zomato delivery", "zomato ltd", "zomato helpline", "जोमैटो", "ज़ोमैटो", "जोमेटो", "ஜொமேட்டோ"],
+    "official_numbers": [],
+    "source_url": "https://www.zomato.com/contact",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Swiggy",
+    "aliases": ["swiggy", "swiggy care", "swiggy support", "swiggy instamart", "swiggy helpline", "स्विगी", "स्वीगी", "ஸ்விகி"],
+    "official_numbers": [],
+    "source_url": "https://www.swiggy.com/support",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Blinkit",
+    "aliases": ["blinkit", "grofers", "blinkit care", "blinkit helpline", "ब्लिंकइट", "ब्लिंकिट", "பிலின்கிட்"],
+    "official_numbers": [],
+    "source_url": "https://blinkit.com",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Zepto",
+    "aliases": ["zepto", "zepto care", "zepto support", "zepto helpline", "ज़ेप्टो", "जेप्टो", "செப்டோ"],
+    "official_numbers": [],
+    "source_url": "https://www.zeptonow.com",
+    "last_checked": "2026-10-10"
   },
   {
     "name": "Flipkart",
-    "aliases": ["flipkart", "flipkart care", "flipkart support", "flipkart customer service"],
+    "aliases": ["flipkart", "flipkart care", "flipkart support", "flipkart customer service", "flipkart helpline", "फ्लिपकार्ट", "फ्लिप कार्ट", "பிளிப்கார்ட்"],
     "official_numbers": [],
     "source_url": "https://www.flipkart.com/helpcentre",
-    "last_checked": "2026-10-08"
+    "last_checked": "2026-10-10"
   },
   {
-    "name": "State Bank of India",
-    "aliases": ["sbi", "state bank of india", "sbi care", "sbi support"],
+    "name": "Amazon India",
+    "aliases": ["amazon", "amazon india", "amazon care", "amazon customer service", "amazon helpline", "अमेज़न", "अमेजन", "அமேசான்"],
     "official_numbers": [],
-    "source_url": "https://sbi.co.in/web/customer-care",
-    "last_checked": "2026-10-08"
+    "source_url": "https://www.amazon.in/contact-us",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "Meesho",
+    "aliases": ["meesho", "meesho care", "meesho support", "meesho helpline", "मीशो", "மீஷோ"],
+    "official_numbers": [],
+    "source_url": "https://www.meesho.com",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "IRCTC / Rail Madad",
+    "aliases": ["irctc", "rail madad", "indian railways", "railway enquiry", "railway customer care", "आईआरसीटीसी", "रेलवे", "रेल मदद", "ஐஆர்சிடிசி"],
+    "official_numbers": ["139"],
+    "source_url": "https://www.irctc.co.in",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "National Cyber Crime Helpline",
+    "aliases": ["cyber crime", "cybercrime", "cyber helpline", "cyber police", "1930", "साइबर क्राइम", "साइबर अपराध", "சைபர் கிரைம்"],
+    "official_numbers": ["1930"],
+    "source_url": "https://cybercrime.gov.in/",
+    "last_checked": "2026-10-10"
+  },
+  {
+    "name": "National Consumer Helpline",
+    "aliases": ["consumer helpline", "national consumer helpline", "consumer court", "nch", "1915", "उपभोक्ता हेल्पलाइन", "நுகர்வோர் உதவி எண்"],
+    "official_numbers": ["1915"],
+    "source_url": "https://consumerhelpline.gov.in",
+    "last_checked": "2026-10-10"
   }
 ]
