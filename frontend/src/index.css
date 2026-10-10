@@ -139,7 +139,8 @@ main{max-width:1280px;margin:0 auto;padding:0 32px 100px}
 @keyframes indeterminate{0%{left:-40%}100%{left:100%}}
 .modal-backdrop, .modal-overlay{position:fixed;inset:0;background:rgba(20,20,19,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:999;display:flex;align-items:center;justify-content:center;padding:16px;animation:backdropFade 200ms var(--ease-out) both}
 @keyframes backdropFade{from{opacity:0}to{opacity:1}}
-.modal-card, .modal-content{background:var(--paper);color:var(--ink);border-radius:var(--radius-card);max-width:580px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,0.18);border:1.5px solid var(--ink);animation:modalCardPop 220ms var(--ease-out) both;max-height:calc(100vh - 36px);display:flex;flex-direction:column;overflow:hidden;position:relative}
+.modal-card, .modal-content{background:var(--paper);color:var(--ink);border-radius:var(--radius-card);max-width:580px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,0.18);border:1.5px solid var(--ink);animation:modalCardPop 220ms var(--ease-out) both;max-height:calc(100vh - 36px);display:flex;flex-direction:column;overflow:hidden;position:relative;padding:32px}
+.modal-content{padding:0}
 @keyframes modalCardPop{from{transform:scale(0.96) translateY(8px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
 .modal-header{padding:22px 26px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);background:var(--paper);flex-shrink:0}
 .modal-header h3{margin:0;font-size:20px;font-weight:700;color:var(--ink)}

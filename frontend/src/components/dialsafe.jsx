@@ -812,26 +812,50 @@ export function WhatsAppBand() {
   }, [showQR])
 
   const qrModal = showQR ? (
-    <div className="modal-backdrop" onClick={() => setShowQR(false)} role="dialog" aria-modal="true">
-      <div className="modal-card" style={{ textAlign: 'center', maxWidth: 480 }} onClick={(e) => e.stopPropagation()}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#E6F4EA', display: 'grid', placeItems: 'center', color: '#1E7B3A' }}>
-              <QrCode size={18} />
-            </div>
-            <h3 style={{ margin: 0, fontSize: 20 }}>Scan to chat on WhatsApp</h3>
-          </div>
-          <button
-            type="button"
-            className="modal-close-btn"
-            onClick={() => setShowQR(false)}
-            aria-label="Close"
-          >
-            <X size={18} />
-          </button>
+    <div className="modal-backdrop" onClick={() => setShowQR(false)} role="dialog" aria-modal="true" style={{ padding: 20 }}>
+      <div 
+        className="modal-card" 
+        style={{ 
+          textAlign: 'center', 
+          maxWidth: 460, 
+          width: '100%',
+          padding: '36px 32px 32px',
+          position: 'relative',
+          borderRadius: 36
+        }} 
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Floating Close Button in top right */}
+        <button
+          type="button"
+          className="modal-close-btn"
+          onClick={() => setShowQR(false)}
+          aria-label="Close"
+          style={{ position: 'absolute', top: 18, right: 18 }}
+        >
+          <X size={18} />
+        </button>
+
+        {/* Centered Icon Badge */}
+        <div style={{
+          width: 48,
+          height: 48,
+          borderRadius: '50%',
+          background: '#E6F4EA',
+          border: '1.5px solid #34A853',
+          display: 'grid',
+          placeItems: 'center',
+          color: '#1E7B3A',
+          margin: '0 auto 14px'
+        }}>
+          <QrCode size={22} />
         </div>
 
-        <p style={{ color: 'var(--muted)', fontSize: 15, margin: '0 0 16px' }}>
+        {/* Centered Title & Description */}
+        <h3 style={{ margin: '0 0 8px', fontSize: 22, fontWeight: 700, color: 'var(--ink)' }}>
+          Scan to chat on WhatsApp
+        </h3>
+        <p style={{ color: 'var(--muted)', fontSize: 15, margin: '0 auto 16px', maxWidth: 360, lineHeight: 1.45 }}>
           Point your smartphone camera to connect directly with the DialSafe WhatsApp verification bot.
         </p>
 
@@ -852,12 +876,30 @@ export function WhatsAppBand() {
           )}
         </div>
 
-        <p style={{ fontSize: 13, color: 'var(--muted)', margin: '8px 0 20px' }}>
-          {qrLoading ? 'Connecting to Twilio WhatsApp Sandbox…' : 'Twilio WhatsApp Sandbox join instruction supported.'}
-        </p>
+        {/* Status Chip */}
+        <div style={{ 
+          display: 'inline-flex', 
+          alignItems: 'center', 
+          gap: 6, 
+          background: 'var(--cream)', 
+          padding: '6px 14px', 
+          borderRadius: 'var(--radius-pill)', 
+          border: '1px solid var(--line)', 
+          fontSize: 13, 
+          color: 'var(--muted)', 
+          margin: '4px auto 22px' 
+        }}>
+          {qrLoading ? 'Connecting to Twilio Sandbox…' : 'Twilio WhatsApp Sandbox join instruction supported.'}
+        </div>
 
-        <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
-          <button type="button" className="button button-outline" onClick={() => setShowQR(false)}>
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+          <button 
+            type="button" 
+            className="button button-outline" 
+            onClick={() => setShowQR(false)}
+            style={{ minHeight: 46, padding: '0 20px', fontSize: 15 }}
+          >
             Close
           </button>
           <a
@@ -865,7 +907,7 @@ export function WhatsAppBand() {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ textDecoration: 'none' }}
+            style={{ minHeight: 46, padding: '0 22px', fontSize: 15, textDecoration: 'none' }}
           >
             Chat on WhatsApp <ArrowRight size={16} />
           </a>
